@@ -5,10 +5,19 @@ const packageDef = protoLoader.loadSync('todo.proto', {});
 const grpcObject = grpc.loadPackageDefinition(packageDef);
 const todoPackage = grpcObject.todoPackage;
 
+const todos = [];
+
 function createTodoNative(call, callback) {
-    console.log(call);
+    const todoItem = {
+        id: todos.length + 1,
+        text: call.request.text,
+    };
+    todos.push(todoItem);
+    callback(null, todoItem);
 }
-function readTodosNative(call, callback) {}
+function readTodosNative(call, callback) {
+    callback(null, { items: todos });
+}
 
 const server = new grpc.Server();
 server.addService(todoPackage.Todo.service, {
