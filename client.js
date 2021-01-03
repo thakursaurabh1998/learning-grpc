@@ -26,6 +26,13 @@ client.createTodo(
                 }
             });
 
+            const callStream = client.readTodoStream();
+
+            callStream.on('data', (item) => {
+                console.log('received data', JSON.stringify(item));
+            });
+
+            callStream.on('end', (e) => console.log('stream finished'));
         }
     }
 );
